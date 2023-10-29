@@ -6,22 +6,26 @@
     "wall_clock_breakdown": false,
     "dump_state": false,
     "optimizer": {
-        "type": "AdamW",
+        "type": "Adam",
         "params": {
-            "lr": 1e-5,
-            "betas": "auto",
-            "eps": "auto",
-            "weight_decay": "auto"
+            "lr": 5e-6,
+            "betas": [0.9,0.95],
+            "eps": 1e-8,
+            "weight_decay": 1e-4,
+            "torch_adam": true,
+            "adam_w_mode": true
         }
     },
     "scheduler": {
-        "type": "WarmupDecayLR",
+        "type": "OneCycle",
         "params": {
-            "warmup_min_lr": "auto",
-            "warmup_max_lr": "auto",
-            "warmup_num_steps": "auto",
-            "total_num_steps": "auto",
-            "decay_schedule ": "linear"
+            "cycle_first_step_size": 0,
+            "cycle_second_step_size": 100,
+            "decay_lr_rate": 0.1,
+            "cycle_first_stair_count": 0,
+            "cycle_second_stair_count": 0,
+            "first_cycle_lr": 1e-5,
+            "second_cycle_lr": 1e-5
         }
     },
     "fp16": {
@@ -46,27 +50,19 @@
         "overlap_comm": true,
         "contiguous_gradients": true,
         "allgather_partitions": true,
-        "reduce_scatter": true,
-        "allgather_bucket_size": "auto",
-        "reduce_bucket_size": "auto",
-        "sub_group_size": "auto",
-        "stage3_prefetch_bucket_size": "auto",
-        "stage3_param_persistence_threshold": "auto",
-        "stage3_max_live_parameters": "auto",
-        "stage3_max_reuse_distance": "auto",
-        "stage3_gather_16bit_weights_on_model_save": "auto"
+        "stage3_gather_16bit_weights_on_model_save": true
     },
     "activation_checkpointing": {
         "partition_activations": true,
         "cpu_checkpointing": true,
         "contiguous_memory_optimization": true,
-        "number_checkpoints": 10,
+        "number_checkpoints": 8,
         "synchronize_checkpoint_boundary": false,
         "profile": false
     },
     "tensorboard": {
-        "enabled": false,
-        "output_path": "auto",
-        "job_name": "auto"
+        "enabled": true,
+        "output_path": "./tensorboard",
+        "job_name": "Training"
     }
 }
